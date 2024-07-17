@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 require('dotenv').config();
+mongoose.set('strictQuery', true);
 
 const dbUrl:string = process.env.DATABASE || '';
 

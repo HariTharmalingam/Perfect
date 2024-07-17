@@ -5,6 +5,7 @@ const jwt = require('jsonwebtoken');
 const express = require("express");
 const authRouter = express.Router();
 // Register User
+export const signup =
 authRouter.post("/signup", async (req, res, next) => {
 
   console.log("request  : ")

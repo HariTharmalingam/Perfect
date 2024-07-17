@@ -53,7 +53,7 @@ export const registrationUser = CatchAsyncError(
       try {
         await sendMail({
           email: user.email,
-          subject: "Activate your account",
+          subject: "Activer votre compte",
           template: "activation-mail.ejs",
           data,
         });
@@ -222,17 +222,17 @@ export const updateAccessToken = CatchAsyncError(
   }
 );
 
-// // get user info
-// export const getUserInfo = CatchAsyncError(
-//   async (req: Request, res: Response, next: NextFunction) => {
-//     try {
-//       const userId = req.user?._id;
-//       getUserById(userId, res);
-//     } catch (error: any) {
-//       return next(new ErrorHandler(error.message, 400));
-//     }
-//   }
-// );
+// get user info
+export const getUserInfo = CatchAsyncError(
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const userId = req.user?._id;
+      getUserById(userId, res);
+    } catch (error: any) {
+      return next(new ErrorHandler(error.message, 400));
+    }
+  }
+);
 
 interface ISocialAuthBody {
   email: string;
