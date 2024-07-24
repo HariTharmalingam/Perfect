@@ -1,45 +1,35 @@
 import mongoose, { Document, Model, Schema } from "mongoose";
 import { IUser } from "./user.model";
 
-interface IProgramData extends Document {
-  title: string;
-  description: string;
-  videoUrl: string;
-  videoThumbnail: object;
-  videoSection: string;
-  videoLength: number;
-  videoPlayer: string;
-  suggestion: string;
-}
-
- export interface IProgram extends Document {
-  name: string;
-  description: string;
-  categories: string;
-  price: number;
-  estimatedPrice?: number;
-  thumbnail: object;
-  tags: string;
-  level: string;
-  demoUrl: string;
-  benefits: { title: string }[];
-  prerequisites: { title: string }[];
-  programData: IProgramData[];
-  ratings?: number;
-  purchased: number;
+export interface IProgram extends Document {
+  id: number
+  name: string
+  session: Session[]
 }
 
 
-const programDataSchema = new Schema<IProgramData>({
-  videoUrl: String,
-  videoThumbnail: Object,
-  title: String,
-  videoSection: String,
-  description: String,
-  videoLength: Number,
-  videoPlayer: String,
-  suggestion: String,
-});
+interface Session extends Document {
+  sessionNumber: number
+  warmup?: string
+  instructions: string
+  exercises: Exercise[]
+  sessionType?: string
+}
+interface Exercise {
+  exerciseNumber: number
+  exerciseName: string
+  exerciseDescription: string
+  image: string
+  weeks: Week[]
+}
+
+interface Week {
+  weekNumber: number
+  sets: number
+  reps?: string[]
+  rest?: string[]
+  duration?: string[]
+}
 
 const programSchema = new Schema<IProgram>({
   name: {
@@ -94,6 +84,17 @@ const programSchema = new Schema<IProgram>({
    },
 },{timestamps: true});
 
+
+const programDataSchema = new Schema<IProgramData>({
+  videoUrl: String,
+  videoThumbnail: Object,
+  title: String,
+  videoSection: String,
+  description: String,
+  videoLength: Number,
+  videoPlayer: String,
+  suggestion: String,
+});
 
 const ProgramModel: Model<IProgram> = mongoose.model("Program", programSchema);
 
