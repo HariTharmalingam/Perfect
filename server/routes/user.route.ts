@@ -34,25 +34,25 @@ userRouter.put("/auth/update-user-password", isAutheticated, updatePassword);
 
 userRouter.put("/auth/update-user-avatar", isAutheticated, updateProfilePicture);
 
-// userRouter.get(
-//   "/get-users",
-//   isAutheticated,
-//   authorizeRoles("admin"),
-//   getAllUsers
-// );
+userRouter.get(
+  "/get-users",
+  isAutheticated,
+  authorizeRoles("admin"),
+  getAllUsers
+);
 
-// userRouter.put(
-//   "/update-user",
-//   isAutheticated,
-//   authorizeRoles("admin"),
-//   updateUserRole
-// );
+userRouter.put(
+  "/update-user",
+  isAutheticated,
+  authorizeRoles("admin"),
+  updateUserRole
+);
 
-// userRouter.delete(
-//   "/delete-user/:id",
-//   isAutheticated,
-//   authorizeRoles("admin"),
-//   deleteUser
-// );
+userRouter.delete(
+  "/delete-user/:id",
+  isAutheticated,
+  authorizeRoles("admin"),
+  deleteUser
+);
 
 export default userRouter;

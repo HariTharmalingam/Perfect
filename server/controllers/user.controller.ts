@@ -16,6 +16,9 @@ import {
 } from "../services/user.service"
 import cloudinary from "cloudinary";
 
+import moment from 'moment';
+import dayjs from 'dayjs';
+
 // register user
 interface IRegistrationBody {
   name: string;
@@ -141,13 +144,13 @@ export const activateUser = CatchAsyncError(
 interface ILoginRequest {
   email: string;
   password: string;
+  createdAt: string;
 }
 
 export const loginUser = CatchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { email, password } = req.body as ILoginRequest;
-      console.log(email, password);
+      const { email, password, createdAt } = req.body as ILoginRequest;
       if (!email || !password) {
         return next(new ErrorHandler("Please enter email and password", 400));
       }
@@ -163,6 +166,14 @@ export const loginUser = CatchAsyncError(
         return next(new ErrorHandler("Invalid email or password", 400));
       }
       sendToken(user, 200, res);
+      //TODO
+      // const date1 = moment('2024-04-17T08:23:27');
+      // console.log(date1);
+      
+      // const date2 = moment();
+      // console.log(date2);
+      // console.log(date2.diff(date1,'week'));  
+      // console.log(user.createdAt);  
     } catch (error: any) {
       return next(new ErrorHandler(error.message, 400));
     }
@@ -388,60 +399,60 @@ export const updateProfilePicture = CatchAsyncError(
   }
 );
 
-// // get all users --- only for admin
-// export const getAllUsers = CatchAsyncError(
-//   async (req: Request, res: Response, next: NextFunction) => {
-//     try {
-//       getAllUsersService(res);
-//     } catch (error: any) {
-//       return next(new ErrorHandler(error.message, 400));
-//     }
-//   }
-// );
+// get all users --- only for admin
+export const getAllUsers = CatchAsyncError(
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      getAllUsersService(res);
+    } catch (error: any) {
+      return next(new ErrorHandler(error.message, 400));
+    }
+  }
+);
 
-// // update user role --- only for admin
-// export const updateUserRole = CatchAsyncError(
-//   async (req: Request, res: Response, next: NextFunction) => {
-//     try {
-//       const { email, role } = req.body;
-//       const isUserExist = await userModel.findOne({ email });
-//       if (isUserExist) {
-//         const id = isUserExist._id;
-//         updateUserRoleService(res, id, role);
-//       } else {
-//         res.status(400).json({
-//           success: false,
-//           message: "User not found",
-//         });
-//       }
-//     } catch (error: any) {
-//       return next(new ErrorHandler(error.message, 400));
-//     }
-//   }
-// );
+// update user role --- only for admin
+export const updateUserRole = CatchAsyncError(
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { email, role } = req.body;
+      const isUserExist = await userModel.findOne({ email });
+      if (isUserExist) {
+        const id = isUserExist._id;
+        updateUserRoleService(res, id, role);
+      } else {
+        res.status(400).json({
+          success: false,
+          message: "User not found",
+        });
+      }
+    } catch (error: any) {
+      return next(new ErrorHandler(error.message, 400));
+    }
+  }
+);
 
-// // Delete user --- only for admin
-// export const deleteUser = CatchAsyncError(
-//   async (req: Request, res: Response, next: NextFunction) => {
-//     try {
-//       const { id } = req.params;
+// Delete user --- only for admin
+export const deleteUser = CatchAsyncError(
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { id } = req.params;
 
-//       const user = await userModel.findById(id);
+      const user = await userModel.findById(id);
 
-//       if (!user) {
-//         return next(new ErrorHandler("User not found", 404));
-//       }
+      if (!user) {
+        return next(new ErrorHandler("User not found", 404));
+      }
 
-//       await user.deleteOne({ id });
+      await user.deleteOne({ id });
 
-//       await redis.del(id);
+      await redis.del(id);
 
-//       res.status(200).json({
-//         success: true,
-//         message: "User deleted successfully",
-//       });
-//     } catch (error: any) {
-//       return next(new ErrorHandler(error.message, 400));
-//     }
-//   }
-// );
+      res.status(200).json({
+        success: true,
+        message: "User deleted successfully",
+      });
+    } catch (error: any) {
+      return next(new ErrorHandler(error.message, 400));
+    }
+  }
+);
