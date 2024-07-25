@@ -16,8 +16,8 @@ app.use(cookieParser());
 // cors => cross origin resource sharing
 app.use(
   cors({
-    origin: ["http://localhost:3000"],
-    credentials: true,
+    origin: ["http://localhost:8000"],
+    // credentials: true,
   })
 );
 
@@ -38,7 +38,7 @@ app.use(
 // testing api
 app.get("/test", (req: Request, res: Response, next: NextFunction) => {
   res.status(200).json({
-    succcess: true,
+    success: true,
     message: "API is working",
   });
 });

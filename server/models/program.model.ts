@@ -4,26 +4,26 @@ import { IUser } from "./user.model";
 export interface IProgram extends Document {
   id: number
   name: string
-  session: Session[]
+  session: ISession[]
 }
 
 
-interface Session extends Document {
+interface ISession extends Document {
   sessionNumber: number
   warmup?: string
   instructions: string
-  exercises: Exercise[]
+  exercises: IExercises[]
   sessionType?: string
 }
-interface Exercise {
+interface IExercises {
   exerciseNumber: number
   exerciseName: string
   exerciseDescription: string
   image: string
-  weeks: Week[]
+  weeks: IWeeks[]
 }
 
-interface Week {
+interface IWeeks {
   weekNumber: number
   sets: number
   reps?: string[]
@@ -31,70 +31,42 @@ interface Week {
   duration?: string[]
 }
 
+const weeksSchema = new Schema<IWeeks>({
+  weekNumber: Number,
+  sets: Number,
+  reps: String,
+  rest: String,
+  duration: String,
+});
+
+const exercisesSchema = new Schema<IExercises>({
+  exerciseNumber: Number,
+  exerciseName: String,
+  exerciseDescription: String,
+  image: String,
+  weeks: [weeksSchema],
+});
+
+const sessionSchema = new Schema<ISession>({
+  sessionNumber: Number,
+  warmup: String,
+  instructions: String,
+  sessionType: String,
+  exercises: [exercisesSchema],
+});
+
+
 const programSchema = new Schema<IProgram>({
+  id: {
+    type: Number,
+    required: true,
+  },
   name: {
     type: String,
     required: true,
   },
-  description: {
-    type: String,
-    required: true,
-  },
-  categories:{
-    type:String,
-    required: true,
-  },
-  price: {
-    type: Number,
-    required: true,
-  },
-  estimatedPrice: {
-    type: Number,
-  },
-  thumbnail: {
-    public_id: {
-      type: String,
-    },
-    url: {
-      type: String,
-    },
-  },
-  tags:{
-    type: String,
-    required: true,
-  },
-  level:{
-    type: String,
-    required: true,
-  },
-  demoUrl:{
-    type: String,
-    required: true,
-  },
-  benefits: [{title: String}],
-  prerequisites: [{title: String}],
-   programData: [programDataSchema],
-   ratings:{
-     type: Number,
-     default: 0,
-   },
-   purchased:{
-    type: Number,
-    default: 0,
-   },
+  session: [sessionSchema],
 },{timestamps: true});
-
-
-const programDataSchema = new Schema<IProgramData>({
-  videoUrl: String,
-  videoThumbnail: Object,
-  title: String,
-  videoSection: String,
-  description: String,
-  videoLength: Number,
-  videoPlayer: String,
-  suggestion: String,
-});
 
 const ProgramModel: Model<IProgram> = mongoose.model("Program", programSchema);
 
