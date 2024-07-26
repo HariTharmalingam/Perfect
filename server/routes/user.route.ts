@@ -16,23 +16,23 @@ import {
 import { authorizeRoles, isAutheticated } from "../middleware/auth";
 const userRouter = express.Router();
 
-userRouter.post("/auth/registration", registrationUser);
+userRouter.post("/registration", registrationUser);
 
-userRouter.post("/auth/activate-user", activateUser);
+userRouter.post("/activate-user", activateUser);
 
-userRouter.post("/auth/login", loginUser);
+userRouter.post("/login", loginUser);
 
-userRouter.get("/auth/logout",isAutheticated, logoutUser);
+userRouter.get("/logout",isAutheticated, logoutUser);
 
-userRouter.get("/auth/me", isAutheticated, getUserInfo);
+userRouter.get("/me", isAutheticated, getUserInfo);
 
-userRouter.post("/auth/social-auth", socialAuth);
+userRouter.post("/social-auth", socialAuth);
 
-userRouter.put("/auth/update-user-info",isAutheticated, updateUserInfo);
+userRouter.put("/update-user-info",isAutheticated, updateUserInfo);
 
-userRouter.put("/auth/update-user-password", isAutheticated, updatePassword);
+userRouter.put("/update-user-password", isAutheticated, updatePassword);
 
-userRouter.put("/auth/update-user-avatar", isAutheticated, updateProfilePicture);
+userRouter.put("/update-user-avatar", isAutheticated, updateProfilePicture);
 
 userRouter.get(
   "/get-users",
